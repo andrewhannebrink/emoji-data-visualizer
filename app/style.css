@@ -6,3 +6,8 @@
   stroke: #fff;
   stroke-width: 2px;
 }
+
+svg {
+    width: 100%; 
+    height: auto;
+}
