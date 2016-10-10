@@ -1,3 +1,9 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
 .links line {
   stroke-opacity: 0.6;
 }
@@ -5,9 +11,4 @@
 .nodes circle {
   stroke: #fff;
   stroke-width: 2px;
-}
-
-svg {
-    width: 100%; 
-    height: auto;
 }

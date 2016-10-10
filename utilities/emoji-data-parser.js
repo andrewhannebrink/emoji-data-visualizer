@@ -3,10 +3,12 @@ const fs = require('fs'),
             input: require('fs').createReadStream('./emoji-data.txt')
         }),
         graph = {
-            nodes: [],
-            links: []
+            nodes: [], // Holds emojis
+            links: []  // Holds connections between emojis
         },
-        topVersion = 8.0;
+        topVersion = 8.0; // Dont use emoji versions newer than this
+
+let done = false; // Keeps track of when the first non-commented line not about emoji characters is reached. When this is true the parser is done reading emoji-data.txt
 
 const connectAllNodes = (dataset) => {
     for (let i = 0; i < dataset.nodes.length - 1; i += 1) {
@@ -21,19 +23,19 @@ const connectAllNodes = (dataset) => {
 
 const connectSomeNodes = (graph, n = 2000)  => {
     for (let i = 0; i < n; i += 1) {
-        const n1 = Math.floor(Math.random() * graph.nodes.length),
-                n2 = Math.floor(Math.random() * graph.nodes.length);
-
+        const source = Math.floor(Math.random() * graph.nodes.length),
+                target = Math.floor(Math.random() * graph.nodes.length),
+                occurrences = Math.floor(Math.random() * 20);
+                                
         graph.links.push({
-            source: n1,
-            target: n2
+            source,
+            target,
+            occurrences
         });
     }
 };
 
 
-let done = false;
-    //id = 0;
 lineReader.on('line', line => {
     // Not a comment
     if (line[0] !== '#' &&
@@ -55,20 +57,18 @@ lineReader.on('line', line => {
             code = code.split('..')[0];
         }
         for (let i = 0; i < codeRange; i += 1) {
-            const emoji = {};
-            console.log(code);
-            emoji.code = code;
-            //emoji.id = id;
-            emoji.version = version;
-            code = (parseInt('0x' + code) + 1).toString(16);
-            //console.log(typeof code);
-            //id += 1;
+            // ES6 sugar for auto-assignment
+            const emoji = {
+                code,
+                version
+            };
+            // Increments hexadecimal code string by one
+            code = (parseInt('0x' + code) + 1).toString(16); 
             graph.nodes.push(emoji);
-            //console.log(emoji);
         }
     } else if (line.indexOf('Emoji_Presentation') !== -1 &&
             done === false) {
-        connectSomeNodes(graph, 2000);
+        connectSomeNodes(graph, 3000);
         const json = JSON.stringify(graph);
         fs.writeFile('emoji-data.json', json);
         lineReader.close();
