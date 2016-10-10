@@ -6,7 +6,8 @@ const fs = require('fs'),
             nodes: [], // Holds emojis
             links: []  // Holds connections between emojis
         },
-        topVersion = 8.0; // Dont use emoji versions newer than this
+        topVersion = 8.0, // Dont use emoji versions newer than this
+        totalLinks = 1200;
 
 let done = false; // Keeps track of when the first non-commented line not about emoji characters is reached. When this is true the parser is done reading emoji-data.txt
 
@@ -68,7 +69,7 @@ lineReader.on('line', line => {
         }
     } else if (line.indexOf('Emoji_Presentation') !== -1 &&
             done === false) {
-        connectSomeNodes(graph, 3000);
+        connectSomeNodes(graph, totalLinks);
         const json = JSON.stringify(graph);
         fs.writeFile('emoji-data.json', json);
         lineReader.close();
