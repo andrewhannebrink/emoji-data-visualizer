@@ -1,17 +1,17 @@
 {
   "name": "vis",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "dependencies": {
-    "d3": "^4.2.6",
-    "http-server": "^0.9.0"
+    "http-server": "^0.9.0",
+    "twit": "^2.2.5"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server app"
+    "start": "http-server app",
+    "parse": "node utilities/emoji-data-parser/emoji-data-parser.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "description": ""
 }

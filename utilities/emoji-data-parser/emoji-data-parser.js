@@ -1,6 +1,6 @@
 const fs = require('fs'),
         lineReader = require('readline').createInterface({
-            input: require('fs').createReadStream('./emoji-data.txt')
+            input: require('fs').createReadStream('./utilities/emoji-data-parser/emoji-data.txt')
         }),
         graph = {
             nodes: [], // Holds emojis
@@ -71,7 +71,7 @@ lineReader.on('line', line => {
             done === false) {
         connectSomeNodes(graph, totalLinks);
         const json = JSON.stringify(graph);
-        fs.writeFile('emoji-data.json', json);
+        fs.writeFile('./utilities/emoji-data-parser/emoji-data.json', json);
         lineReader.close();
         done = true;
         console.log('total nodes: ');
