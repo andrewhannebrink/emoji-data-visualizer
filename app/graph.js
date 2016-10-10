@@ -88,7 +88,12 @@
         test = graph; // take out
 
         simulation.force('link')
-              .links(graph.links);
+                .links(graph.links)
+                .strength(function strength(link) {
+                    return Math.pow(Math.random(), 3)*2.5;
+                });
+            
+        
     });
 
 })();
