@@ -9,7 +9,8 @@
   "devDependencies": {},
   "scripts": {
     "start": "http-server app",
-    "parse": "node utilities/emoji-data-parser/emoji-data-parser.js"
+    "parse": "node utilities/emoji-data-parser/emoji-data-parser.js",
+    "scrape": "node utilities/twitter-scraper/scraper.js"
   },
   "author": "",
   "license": "ISC",
