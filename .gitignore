@@ -1,2 +1,3 @@
 node_modules
 app/bower_components
+utilities/twitter-scraper/config.js
