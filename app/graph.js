@@ -8,7 +8,7 @@
 
         const occurrencesToOpacity = d3.scaleLinear()
                 .domain([0, d3.max(graph.links, d => d.occurrences)])
-                .range([0.2, 1]);
+                .range([0, 1]);
 
         const occurrencesToColor = d3.scaleLinear()
                 .domain([0, d3.max(graph.links, d => {
@@ -18,27 +18,41 @@
 
         const occurrencesToRgb = d => {
             const totalRgbSteps = Math.floor(
-                            (256 * 4) * occurrencesToUnit(d.occurrences)
+                            (256 * 7) * occurrencesToUnit(d.occurrences)
                             ),
-                    fourth = totalRgbSteps / 256;
+                    seventh = totalRgbSteps / 256;
             let r = 255,            
                     g = 255,
                     b = 255;
 
-            if (fourth < 1) {
-                r -= totalRgbSteps;
-                b -= totalRgbSteps;
-            } else if (fourth >= 1 && fourth < 2) {
-                b = 0;
-                g = 255;
-                r = (totalRgbSteps % 256);
-            } else if (fourth >= 2 && fourth < 3) {
-                b = 0;
+            if (seventh < 1) {
+                // white -> magenta
                 g -= (totalRgbSteps % 256);
-            } else {
-                b = 0;
-                g = 0;
+            } else if (seventh >= 1 && seventh < 2) {
+                // magenta -> blue
                 r -= (totalRgbSteps % 256);
+                g = 0;
+            } else if (seventh >= 2 && seventh < 3) {
+                // blue -> turquoise
+                r = 0;
+                g = (totalRgbSteps % 256);
+            } else if (seventh >= 3 && seventh < 4) {
+                // turquoise -> green
+                r = 0;
+                b -= (totalRgbSteps % 256);
+            } else if (seventh >= 4 && seventh < 5) {
+                // green -> yellow
+                r = (totalRgbSteps % 256);
+                b = 0;
+            } else if (seventh >= 5 && seventh < 6) {
+                // yellow -> red
+                g -= (totalRgbSteps % 256);
+                b = 0;
+            } else {
+                // red -> black
+                r -= (totalRgbSteps % 256);
+                g = 0;
+                b = 0;
             }
 
             return d3.rgb(r, g, b);
@@ -73,7 +87,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink())
-                .force('charge', d3.forceManyBody().strength(-10))
+                .force('charge', d3.forceManyBody().strength(-7))
                 .force('center', d3.forceCenter(width / 2, height / 2));
         
         const link = svg.append('g')
@@ -81,7 +95,7 @@
                 .selectAll('line')
                 .data(graph.links)
                 .enter().append('line')
-                .attr('stroke-width', d => 5 * occurrencesToUnit(d.occurrences) + 0.5)
+                .attr('stroke-width', d => 8 * occurrencesToUnit(d.occurrences) + 0.6)
                 .attr('stroke-opacity', d => occurrencesToOpacity(d.occurrences))
                 .attr('stroke', d => occurrencesToRgb(d));
 
@@ -125,9 +139,7 @@
     
         simulation.force('link')
                 .links(graph.links)
-                .strength(d => Math.pow(occurrencesToUnit(d.occurrences), 3) * 2.5);
-            
-        
+                .strength(d => 0.5 * Math.pow(occurrencesToUnit(d.occurrences), 2));
     });
 
 })();

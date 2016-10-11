@@ -7,7 +7,7 @@ const fs = require('fs'),
             links: []  // Holds connections between emojis
         },
         topVersion = 8.0, // Dont use emoji versions newer than this
-        totalLinks = 1200;
+        totalLinks = 1000;
 
 let done = false; // Keeps track of when the first non-commented line not about emoji characters is reached. When this is true the parser is done reading emoji-data.txt
 
@@ -26,7 +26,7 @@ const connectSomeNodes = (graph, n = 2000)  => {
     for (let i = 0; i < n; i += 1) {
         const source = Math.floor(Math.random() * graph.nodes.length),
                 target = Math.floor(Math.random() * graph.nodes.length),
-                occurrences = Math.floor(Math.random() * 20);
+                occurrences = Math.floor(Math.pow(Math.random() * 10, 2));
                                 
         graph.links.push({
             source,
