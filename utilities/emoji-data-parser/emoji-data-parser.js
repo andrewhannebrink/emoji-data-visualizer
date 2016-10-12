@@ -7,7 +7,20 @@ const fs = require('fs'),
             links: []  // Holds connections between emojis
         },
         topVersion = 8.0, // Dont use emoji versions newer than this
-        totalLinks = 1000;
+        totalLinks = 1100,
+        badEmojis = [
+            'NUMBER SIGN',
+            'ASTERISK',
+            'DIGIT ZERO..DIGIT NINE'
+//            'COPYRIGHT SIGN',
+//            'REGISTERED SIGN',
+//            'DOUBLE EXCLAMATION MARK',
+//            'EXCLAMATION QUESTION MARK',
+//            'TRADE MARK SIGN',
+//            'INFORMATION SOURCE',
+//            'LEFT RIGHT ARROW..SOUTH WEST ARROW',
+//            'LEFTWARDS ARROW WITH HOOK..RIGHTWARDS ARROW WITH HOOK'
+        ];
 
 let done = false; // Keeps track of when the first non-commented line not about emoji characters is reached. When this is true the parser is done reading emoji-data.txt
 
@@ -26,7 +39,7 @@ const connectSomeNodes = (graph, n = 2000)  => {
     for (let i = 0; i < n; i += 1) {
         const source = Math.floor(Math.random() * graph.nodes.length),
                 target = Math.floor(Math.random() * graph.nodes.length),
-                occurrences = Math.floor(Math.pow(Math.random() * 10, 2));
+                occurrences = Math.floor(Math.random() * 256);
                                 
         graph.links.push({
             source,
@@ -42,6 +55,12 @@ lineReader.on('line', line => {
     if (line[0] !== '#' &&
             line.indexOf('Emoji_Modifier') === -1 && 
             line.indexOf('Emoji_Presentation') === -1) {
+
+        for (let i = 0; i < badEmojis.length; i += 1) {
+            if (line.indexOf(badEmojis[i]) > -1) {
+                return;
+            }
+        }
 
         const codeRange = line.slice(line.indexOf('[') + 1, line.indexOf(']')),
                 versStrIdx = line.search(/\d+\.\d+/),

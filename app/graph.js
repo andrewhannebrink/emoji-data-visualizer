@@ -2,20 +2,24 @@
 
     d3.json("/emoji-data.json", graph => {
 
+        // Unit scale for edges
         const occurrencesToUnit = d3.scaleLinear()
                 .domain([0, d3.max(graph.links, d => d.occurrences)])
                 .range([0, 1]);
 
+        // Opacity scale for edges
         const occurrencesToOpacity = d3.scaleLinear()
                 .domain([0, d3.max(graph.links, d => d.occurrences)])
                 .range([0, 1]);
 
+        // 0-256 scale for edges
         const occurrencesToColor = d3.scaleLinear()
                 .domain([0, d3.max(graph.links, d => {
                     return d.occurrences;
                 })])
                 .range([0, 256]);
 
+        // Function for calculating color gradients for edges
         const occurrencesToRgb = d => {
             const totalRgbSteps = Math.floor(
                             (256 * 7) * occurrencesToUnit(d.occurrences)
@@ -28,23 +32,23 @@
             if (seventh < 1) {
                 // white -> magenta
                 g -= (totalRgbSteps % 256);
-            } else if (seventh >= 1 && seventh < 2) {
+            } else if (seventh < 2) {
                 // magenta -> blue
                 r -= (totalRgbSteps % 256);
                 g = 0;
-            } else if (seventh >= 2 && seventh < 3) {
+            } else if (seventh < 3) {
                 // blue -> turquoise
                 r = 0;
                 g = (totalRgbSteps % 256);
-            } else if (seventh >= 3 && seventh < 4) {
+            } else if (seventh < 4) {
                 // turquoise -> green
                 r = 0;
                 b -= (totalRgbSteps % 256);
-            } else if (seventh >= 4 && seventh < 5) {
+            } else if (seventh < 5) {
                 // green -> yellow
                 r = (totalRgbSteps % 256);
                 b = 0;
-            } else if (seventh >= 5 && seventh < 6) {
+            } else if (seventh < 6) {
                 // yellow -> red
                 g -= (totalRgbSteps % 256);
                 b = 0;
@@ -87,7 +91,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink())
-                .force('charge', d3.forceManyBody().strength(-7))
+                .force('charge', d3.forceManyBody().strength(-5))
                 .force('center', d3.forceCenter(width / 2, height / 2));
         
         const link = svg.append('g')
@@ -139,7 +143,7 @@
     
         simulation.force('link')
                 .links(graph.links)
-                .strength(d => 0.5 * Math.pow(occurrencesToUnit(d.occurrences), 2));
+                .strength(d => Math.pow(occurrencesToUnit(d.occurrences), 2));
     });
 
 })();
