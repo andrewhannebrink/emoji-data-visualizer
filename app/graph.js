@@ -7,14 +7,15 @@
         test = graph;
 
         // Unit scale for edges
-        const occurrencesToUnit = d3.scaleLinear()
-                .domain([0, d3.max(graph.links, d => d.occurrences)])
+        const occurrencesToUnit = d3.scaleLog()
+                .base(100000000)
+                .domain([1, d3.max(graph.links, d => d.occurrences)])
                 .range([0, 1]);
 
         // Opacity scale for edges
-        const occurrencesToOpacity = d3.scaleLinear()
-                .domain([0, d3.max(graph.links, d => d.occurrences)])
-                .range([0, 1]);
+        const occurrencesToOpacity = d3.scaleLog()
+                .domain([1, d3.max(graph.links, d => d.occurrences)])
+                .range([0.2, 1]);
 
         // 0-256 scale for edges
         const occurrencesToColor = d3.scaleLinear()
@@ -87,7 +88,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink().id(d => d.code))
-                .force('charge', d3.forceManyBody().strength(-35))
+                .force('charge', d3.forceManyBody().strength(-50))
                 .force('center', d3.forceCenter(width / 2, height / 2));
         
         const link = svg.append('g')
@@ -95,7 +96,7 @@
                 .selectAll('line')
                 .data(graph.links)
                 .enter().append('line')
-                .attr('stroke-width', d => 10 * occurrencesToUnit(d.occurrences) + 1)
+                .attr('stroke-width', d => 10 * occurrencesToUnit(d.occurrences) + 1.5)
                 .attr('stroke-opacity', d => occurrencesToOpacity(d.occurrences))
                 .attr('stroke', d => occurrencesToRgb(d));
 
@@ -139,7 +140,7 @@
     
         simulation.force('link')
                 .links(graph.links)
-                .strength(d => 0.5 * occurrencesToUnit(d.occurrences));
+                .strength(d => 0.5 * occurrencesToUnit(d.occurrences) + 0.1);
     });
 
 })();
