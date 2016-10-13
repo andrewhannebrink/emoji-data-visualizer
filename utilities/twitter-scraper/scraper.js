@@ -57,14 +57,28 @@ const getEmojis = text => {
                 .reduce((a, b) => a + b));
     }
     return emojiCodes;
-}
+};
+
+const updateMongo = (emoji, assocOnly = false, countDups = true) => {
+    //TODO
+};
+
 
 // Use connect method to connect to the server
 MongoClient.connect(mongoUrl, function(err, db) {
     assert.equal(null, err);
-    console.log("Connected successfully to server");
+    console.log("Connected successfully to mongo");
+
+    // Make sure all emojis in json have an entry in mongo
+    for (let i = 0; i < emojiData.nodes.length; i += 1) {
+        // if (emojiData.nodes[i] not in mongo) {
+        //      TODO put it in
+        // }
+    }
+
     stream.on('tweet', function (tweet) {
         var emojis = getEmojis(tweet.text)
+        updateMongo(emojis);
     });
     //db.close();
 });
