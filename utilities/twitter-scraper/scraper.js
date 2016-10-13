@@ -1,9 +1,12 @@
 // Bot for collecting data about tweets in which multiple emojis are used
-var Bot = require('./bot')
-  , config1 = require('./config1')
-  , fs = require('fs');
+var Bot = require('./bot'),
+        config1 = require('./config1'),
+        fs = require('fs'),
+        MongoClient = require('mongodb').MongoClient,
+        assert = require('assert');
 
-var bot = new Bot(config1);
+var bot = new Bot(config1),
+        mongoUrl = 'mongodb://localhost:27017/emojis';
 
 console.log('scraper running ... ');
 
@@ -56,8 +59,14 @@ const getEmojis = text => {
     return emojiCodes;
 }
 
-stream.on('tweet', function (tweet) {
-    var emojis = getEmojis(tweet.text)
+// Use connect method to connect to the server
+MongoClient.connect(mongoUrl, function(err, db) {
+    assert.equal(null, err);
+    console.log("Connected successfully to server");
+    stream.on('tweet', function (tweet) {
+        var emojis = getEmojis(tweet.text)
+    });
+    //db.close();
 });
 
 
