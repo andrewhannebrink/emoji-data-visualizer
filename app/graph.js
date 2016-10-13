@@ -1,6 +1,10 @@
 (() => {
 
-    d3.json("/emoji-data.json", graph => {
+    //d3.json("/emoji-data.json", graph => {
+    $.post( 'http://localhost:8080/api/graph', res => {
+        
+        const graph = JSON.parse(res);
+        test = graph;
 
         // Unit scale for edges
         const occurrencesToUnit = d3.scaleLinear()
@@ -22,33 +26,25 @@
         // Function for calculating color gradients for edges
         const occurrencesToRgb = d => {
             const totalRgbSteps = Math.floor(
-                            (256 * 7) * occurrencesToUnit(d.occurrences)
-                            ),
-                    seventh = totalRgbSteps / 256;
+                            (256 * 5) * occurrencesToUnit(d.occurrences)),
+                    fifth = totalRgbSteps / 256;
             let r = 255,            
                     g = 255,
                     b = 255;
 
-            if (seventh < 1) {
-                // white -> magenta
-                g -= (totalRgbSteps % 256);
-            } else if (seventh < 2) {
-                // magenta -> blue
-                r -= (totalRgbSteps % 256);
-                g = 0;
-            } else if (seventh < 3) {
+            if (fifth < 1) {
                 // blue -> turquoise
                 r = 0;
                 g = (totalRgbSteps % 256);
-            } else if (seventh < 4) {
+            } else if (fifth < 2) {
                 // turquoise -> green
                 r = 0;
                 b -= (totalRgbSteps % 256);
-            } else if (seventh < 5) {
+            } else if (fifth < 3) {
                 // green -> yellow
                 r = (totalRgbSteps % 256);
                 b = 0;
-            } else if (seventh < 6) {
+            } else if (fifth < 4) {
                 // yellow -> red
                 g -= (totalRgbSteps % 256);
                 b = 0;
@@ -91,7 +87,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink().id(d => d.code))
-                .force('charge', d3.forceManyBody().strength(-5))
+                .force('charge', d3.forceManyBody().strength(-35))
                 .force('center', d3.forceCenter(width / 2, height / 2));
         
         const link = svg.append('g')
@@ -99,7 +95,7 @@
                 .selectAll('line')
                 .data(graph.links)
                 .enter().append('line')
-                .attr('stroke-width', d => 8 * occurrencesToUnit(d.occurrences) + 0.6)
+                .attr('stroke-width', d => 10 * occurrencesToUnit(d.occurrences) + 1)
                 .attr('stroke-opacity', d => occurrencesToOpacity(d.occurrences))
                 .attr('stroke', d => occurrencesToRgb(d));
 
@@ -143,7 +139,7 @@
     
         simulation.force('link')
                 .links(graph.links)
-                .strength(d => Math.pow(occurrencesToUnit(d.occurrences), 2));
+                .strength(d => 0.5 * occurrencesToUnit(d.occurrences));
     });
 
 })();
