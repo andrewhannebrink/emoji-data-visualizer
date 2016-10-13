@@ -54,33 +54,124 @@ const getEmojis = text => {
     }
     if (emojiCodes.length > 0) {
         console.log(emojiCodes.map(code => String.fromCodePoint('0x' + code))
-                .reduce((a, b) => a + b));
+                .reduce((a, b) => a + ' ' + b));
     }
     return emojiCodes;
 };
 
-const updateMongo = (emoji, assocOnly = false, countDups = true) => {
-    //TODO
+// Removes duplicate strings from arrays
+const uniq = a => {
+    const seen = {};
+    return a.filter(item => {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });
+};
+
+// Creates object used for searching for links in mongo with matching source and target in either order
+const queryBySourceOrTarget = (assocs, i, j) => {
+    return {
+        $or: [
+            {
+                source: assocs[i],
+                target: assocs[j]
+            },
+            {
+                source: assocs[j],
+                target: assocs[i]
+            }
+        ]
+    };
+}
+
+
+// Takes array of unique emojis occurring in a tweet, and updates mongo for each association
+// TODO: shorten this into smaller funcs, make object generator for $or clauses, write test cases
+const updateLinkOccurrences = (assocs, linksCollection) => {
+    //if (assocs.length > 1) console.log(assocs.map(c => String.fromCodePoint('0x' + c)));
+    for (let i = 0; i < assocs.length - 1; i += 1) {
+        for (let j = i + 1; j < assocs.length; j += 1) {
+            // Try to find a matching link document in mongo for the association
+            linksCollection.findOne(
+                    queryBySourceOrTarget(assocs, i, j),
+                    (err, link) => {
+                        if (link === null) {
+                            linksCollection.insert(
+                                    {
+                                        source: assocs[i],
+                                        target: assocs[j],
+                                        occurrences: 1
+                                    },
+                                    (err, result) => {
+                                        if (err) {
+                                            console.log(err)
+                                        }
+                                    });
+
+                        } else {
+                            linksCollection.update(
+                                    queryBySourceOrTarget(assocs, i, j),
+                                    {$inc: {occurrences: 1}},
+                                    {w: 1}, 
+                                    (err, result) => {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                    });
+                        }
+                    });
+        }
+    }
+};
+
+// Takes an array of emoji codes and updates mongo for each appearance
+const updateEmojiAppearances = (emojis, assocs, nodesCollection) => {
+    // TODO
+};
+
+// Updates mongo 
+const updateMongo = (emojis, nodesCollection, linksCollection, assocOnly = false, countDups = true) => {
+    const assocs = uniq(emojis);
+    if (countDups === false) {
+        emojis = assocs;
+    }
+    if (assocOnly === true && assocs.length < 2) {
+        return;
+    }
+    updateLinkOccurrences(assocs, linksCollection);
+    updateEmojiAppearances(emojis, assocs, nodesCollection);
 };
 
 
 // Use connect method to connect to the server
-MongoClient.connect(mongoUrl, function(err, db) {
+MongoClient.connect(mongoUrl, (err, db) => {
     assert.equal(null, err);
     console.log("Connected successfully to mongo");
 
-    // Make sure all emojis in json have an entry in mongo
-    for (let i = 0; i < emojiData.nodes.length; i += 1) {
-        // if (emojiData.nodes[i] not in mongo) {
-        //      TODO put it in
-        // }
-    }
-
-    stream.on('tweet', function (tweet) {
-        var emojis = getEmojis(tweet.text)
-        updateMongo(emojis);
+    // Create 'nodes' collection if it doesn't already exist
+    db.createCollection('nodes', (err, nodesCollection) => {
+        db.createCollection('links', (err, linksCollection) => {
+    
+            // Make sure all emojis in json have an entry in mongo
+            for (let i = 0; i < emojiData.nodes.length; i += 1) {
+        
+                const entry = nodesCollection.findOne(
+                        {code: emojiData.nodes[i].code}, 
+                        (err, node) => {
+                            if (node === null) {
+                                const emojiNode = emojiData.nodes[i];
+                                emojiNode.appearances = 0;
+                                nodesCollection.insert(emojiNode);
+                            }
+                        });
+            }
+        
+            stream.on('tweet', function (tweet) {
+                const emojis = getEmojis(tweet.text);
+                updateMongo(emojis, nodesCollection, linksCollection);
+            });
+            //db.close();
+        });
     });
-    //db.close();
 });
 
 

@@ -24,21 +24,12 @@ const fs = require('fs'),
 
 let done = false; // Keeps track of when the first non-commented line not about emoji characters is reached. When this is true the parser is done reading emoji-data.txt
 
-const connectAllNodes = (dataset) => {
-    for (let i = 0; i < dataset.nodes.length - 1; i += 1) {
-        for (let j = i + 1; j < dataset.nodes.length; j += 1) {
-            dataset.links.push({
-                source: i,
-                target: j
-            }); 
-        }   
-    }   
-}; 
-
+// Randomly connect some nodes together with n links, and random occurrences (weights)
 const connectSomeNodes = (graph, n = 2000)  => {
     for (let i = 0; i < n; i += 1) {
-        const source = Math.floor(Math.random() * graph.nodes.length),
-                target = Math.floor(Math.random() * graph.nodes.length),
+        const l = graph.nodes.length,
+                source = graph.nodes[Math.floor(Math.random() * l)].code,
+                target = graph.nodes[Math.floor(Math.random() * l)].code,
                 occurrences = Math.floor(Math.random() * 256);
                                 
         graph.links.push({

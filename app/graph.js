@@ -90,7 +90,7 @@
         const color = d3.scaleOrdinal(d3.schemeCategory20);
     
         const simulation = d3.forceSimulation()
-                .force('link', d3.forceLink())
+                .force('link', d3.forceLink().id(d => d.code))
                 .force('charge', d3.forceManyBody().strength(-5))
                 .force('center', d3.forceCenter(width / 2, height / 2));
         
