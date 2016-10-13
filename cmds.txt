@@ -1,0 +1,2 @@
+sudo mongod --dbpath=/data
+sudo ./usr/local/Cellar/mongodb/3.2.10/bin/mongo
