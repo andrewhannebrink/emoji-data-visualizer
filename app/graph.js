@@ -1,7 +1,7 @@
 (() => {
 
     //d3.json("/emoji-data.json", graph => {
-    $.post( 'http://localhost:8080/api/graph', res => {
+    $.post( 'http://localhost:8080/api/graph/1000', res => {
         
         const graph = JSON.parse(res);
         test = graph;

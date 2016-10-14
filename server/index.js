@@ -16,7 +16,7 @@
         res.sendFile(path.join(pub, 'index.html'));
     });
 
-    app.post('/api/graph', (req, res) => {
+    app.post('/api/graph/:links', (req, res) => {
         MongoClient.connect(mongoUrl, (err, db) => {
             if (err) {
                 res.send(JSON.stringify({'error': err}));
@@ -24,7 +24,9 @@
             const graph = {
                 nodes: [],
                 links: []
-            }
+            };
+            const max = parseInt(req.params.links);
+
             db.collection('nodes', (err, nodesCollection) => {
                 db.collection('links', (err, linksCollection) => {
                     nodesCollection.find({}, (err, nodesCursor) => {
@@ -46,6 +48,9 @@
                                             graph.links = graph.links.sort((a, b) => {
                                                 return a.occurrences > b.occurrences;
                                             });
+                                            graph.links = graph.links.slice(
+                                                    graph.links.length - max, 
+                                                    graph.links.length);
                                             res.send(JSON.stringify(graph));
                                         }
                                     });
