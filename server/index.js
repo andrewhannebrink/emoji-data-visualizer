@@ -9,10 +9,10 @@
     const pub = path.join(__dirname, '../app'),
             mongoUrl = 'mongodb://localhost:27017/emojis';
     
-    app.use(express.static(pub));
+app.use('/m/info', express.static(pub));
 
 
-    app.get('/m', (req, res) => {
+app.get('/m/info', (req, res) => {
         res.sendFile(path.join(pub, 'index.html'));
     });
 

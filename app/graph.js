@@ -1,6 +1,6 @@
 (() => {
 
-    $.post( 'http://localhost:8080/api/graph/1200', res => {
+    $.post( 'http://localhost:8080/api/graph/1600', res => {
         
         const graph = JSON.parse(res);
 
