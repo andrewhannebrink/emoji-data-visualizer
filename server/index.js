@@ -33,7 +33,6 @@
                         linksCollection.find({}, (err, linksCursor) => {
                             assert.equal(err, null);
                             nodesCursor.each((err, node) => {
-                                console.log(node);
                                 assert.equal(err, null);
                                 if (node !== null) {
                                     //res.send(JSON.stringify(graph));

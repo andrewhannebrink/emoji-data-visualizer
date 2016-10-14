@@ -7,31 +7,45 @@
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"></script>
+  <script type="text/javascript" src='modal.js'></script>
 </head>
 
 <body>
-  <svg width="2600" height="2000" ></svg>
-  <script type="text/javascript" src='graph.js'></script>
+
+    <svg width="2600" height="2000" ></svg>
+    <script type="text/javascript" src='graph.js'></script>
+
     <!-- Trigger the modal with a button -->
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+    <button type="button" class="btn-peon btn btn-info btn-lg" data-toggle="modal" data-target="#infoModal">
+      <img src="img/info.png" />
+    </button>
 
     <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
+    <div id="infoModal" class="modal fade in" role="dialog">
     <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <img src = "img/peon.png" />
+        <img src = "img/icon.png" />
+        <img src="img/info.png" />
+        <h4 class="modal-title">Welcome to tinyicon.co/m/info</h4>
       </div>
       <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <p>This data visualization depicts recent emoji usage on Twitter. The top 1,000 most common emoji associations are represented, where bolder red lines denote the emoticons most frequently used together. To get a closer look at some of the connections, you can stretch apart the graph by drag-and-dropping the icons.
+          </p>
+          <p>
+              <ul>
+                  <li> You are viewing data from: today </li>
+                  <li> Emoji version: <= 8.0 </li>
+              </ul>
+          </p>
+
       </div>
     </div>
+
 
 </body>
 </html>

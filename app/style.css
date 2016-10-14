@@ -2,6 +2,17 @@ html,
 body {
     height: 100%;
     margin: 0;
+    font-family: monospace !important;
+}
+
+p, li{
+    font-size:12px;
+}
+
+svg {
+    position:absolute;
+    left:0px;
+    top:0px;
 }
 
 .links line {
@@ -10,4 +21,16 @@ body {
 .nodes circle {
   stroke: #fff;
   stroke-width: 2px;
+}
+
+.btn-peon { 
+    background-color: #eeeeee !important;
+    border: none !important;
+    position:fixed;
+    top:0px;
+    left:0px;
+}
+
+.btn-peon:hover {
+    background-color:#ff6699 !important;
 }

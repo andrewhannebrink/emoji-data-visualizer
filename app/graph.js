@@ -1,10 +1,8 @@
 (() => {
 
-    //d3.json("/emoji-data.json", graph => {
-    $.post( 'http://localhost:8080/api/graph/1000', res => {
+    $.post( 'http://localhost:8080/api/graph/1200', res => {
         
         const graph = JSON.parse(res);
-        test = graph;
 
         // Unit scale for edges
         const occurrencesToUnit = d3.scaleLog()
