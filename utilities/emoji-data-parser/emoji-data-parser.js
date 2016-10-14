@@ -11,7 +11,8 @@ const fs = require('fs'),
         badEmojis = [
             'NUMBER SIGN',
             'ASTERISK',
-            'DIGIT ZERO..DIGIT NINE'
+            'DIGIT ZERO..DIGIT NINE',
+            'REGIONAL INDICATOR SYMBOL LETTER A..'
 //            'COPYRIGHT SIGN',
 //            'REGISTERED SIGN',
 //            'DOUBLE EXCLAMATION MARK',
@@ -20,6 +21,13 @@ const fs = require('fs'),
 //            'INFORMATION SOURCE',
 //            'LEFT RIGHT ARROW..SOUTH WEST ARROW',
 //            'LEFTWARDS ARROW WITH HOOK..RIGHTWARDS ARROW WITH HOOK'
+        ],
+        raceCodes = [
+            '1f3fb',
+            '1f3fc',
+            '1f3fd',
+            '1f3fe',
+            '1f3ff'
         ];
 
 let done = false; // Keeps track of when the first non-commented line not about emoji characters is reached. When this is true the parser is done reading emoji-data.txt
@@ -68,6 +76,9 @@ lineReader.on('line', line => {
             code = code.split('..')[0];
         }
         for (let i = 0; i < codeRange; i += 1) {
+            if (raceCodes.indexOf(code) > -1) {
+                continue;
+            }
             // ES6 sugar for auto-assignment
             const emoji = {
                 code,
