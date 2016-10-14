@@ -9,7 +9,9 @@
         // Unit scale for edges
         const occurrencesToUnit = d3.scaleLog()
                 .base(100000000)
-                .domain([1, d3.max(graph.links, d => d.occurrences)])
+                .domain([
+                        d3.min(graph.links, d => d.occurrences), 
+                        d3.max(graph.links, d => d.occurrences)])
                 .range([0, 1]);
 
         // Opacity scale for edges
@@ -28,27 +30,22 @@
         const occurrencesToRgb = d => {
             const totalRgbSteps = Math.floor(
                             (256 * 4) * occurrencesToUnit(d.occurrences)),
-                    fourth = totalRgbSteps / 256;
+                    third = totalRgbSteps / 256;
             let r = 255,            
                     g = 255,
                     b = 255;
 
-            if (fourth < 1) {
+            if (third < 1) {
                 // turquoise -> green
                 r = 0;
                 b -= (totalRgbSteps % 256);
-            } else if (fourth < 2) {
+            } else if (third < 2) {
                 // green -> yellow
                 r = (totalRgbSteps % 256);
                 b = 0;
-            } else if (fourth < 3) {
+            } else {
                 // yellow -> red
                 g -= (totalRgbSteps % 256);
-                b = 0;
-            } else {
-                // red -> black
-                r -= (totalRgbSteps % 256);
-                g = 0;
                 b = 0;
             }
 
@@ -84,8 +81,8 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink().id(d => d.code))
-                .force('charge', d3.forceManyBody().strength(-70))
-                .force('center', d3.forceCenter(width / 2, height / 2));
+                .force('charge', d3.forceManyBody().strength(-60))
+                .force('center', d3.forceCenter(width / 2 - 350, height / 2));
         
         const link = svg.append('g')
                 .attr('class', 'links')
@@ -136,7 +133,7 @@
     
         simulation.force('link')
                 .links(graph.links)
-                .strength(d => 0.5 * occurrencesToUnit(d.occurrences) + 0.1);
+                //.strength(d => 1(0.05 * occurrencesToUnit(d.occurrences) + 0.3));
     });
 
 })();
