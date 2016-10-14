@@ -15,11 +15,11 @@
         // Opacity scale for edges
         const occurrencesToOpacity = d3.scaleLog()
                 .domain([1, d3.max(graph.links, d => d.occurrences)])
-                .range([0.2, 1]);
+                .range([0.5, 1]);
 
         // 0-256 scale for edges
-        const occurrencesToColor = d3.scaleLinear()
-                .domain([0, d3.max(graph.links, d => {
+        const occurrencesToColor = d3.scaleLog()
+                .domain([1, d3.max(graph.links, d => {
                     return d.occurrences;
                 })])
                 .range([0, 256]);
@@ -27,25 +27,21 @@
         // Function for calculating color gradients for edges
         const occurrencesToRgb = d => {
             const totalRgbSteps = Math.floor(
-                            (256 * 5) * occurrencesToUnit(d.occurrences)),
-                    fifth = totalRgbSteps / 256;
+                            (256 * 4) * occurrencesToUnit(d.occurrences)),
+                    fourth = totalRgbSteps / 256;
             let r = 255,            
                     g = 255,
                     b = 255;
 
-            if (fifth < 1) {
-                // blue -> turquoise
-                r = 0;
-                g = (totalRgbSteps % 256);
-            } else if (fifth < 2) {
+            if (fourth < 1) {
                 // turquoise -> green
                 r = 0;
                 b -= (totalRgbSteps % 256);
-            } else if (fifth < 3) {
+            } else if (fourth < 2) {
                 // green -> yellow
                 r = (totalRgbSteps % 256);
                 b = 0;
-            } else if (fifth < 4) {
+            } else if (fourth < 3) {
                 // yellow -> red
                 g -= (totalRgbSteps % 256);
                 b = 0;
@@ -96,7 +92,7 @@
                 .selectAll('line')
                 .data(graph.links)
                 .enter().append('line')
-                .attr('stroke-width', d => 10 * occurrencesToUnit(d.occurrences) + 1.5)
+                .attr('stroke-width', d => 7 * occurrencesToUnit(d.occurrences) + 1.5)
                 .attr('stroke-opacity', d => occurrencesToOpacity(d.occurrences))
                 .attr('stroke', d => occurrencesToRgb(d));
 

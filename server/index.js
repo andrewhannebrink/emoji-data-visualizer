@@ -43,6 +43,9 @@
                                             graph.links.push(link);
                                         } else {
                                             // Send the completed graph object in json format
+                                            graph.links = graph.links.sort((a, b) => {
+                                                return a.occurrences > b.occurrences;
+                                            });
                                             res.send(JSON.stringify(graph));
                                         }
                                     });
