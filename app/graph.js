@@ -92,7 +92,7 @@
                 .selectAll('line')
                 .data(graph.links)
                 .enter().append('line')
-                .attr('stroke-width', d => 7 * occurrencesToUnit(d.occurrences) + 1.5)
+                .attr('stroke-width', d => 7 * occurrencesToUnit(d.occurrences) + 0.5)
                 .attr('stroke-opacity', d => occurrencesToOpacity(d.occurrences))
                 .attr('stroke', d => occurrencesToRgb(d));
 
