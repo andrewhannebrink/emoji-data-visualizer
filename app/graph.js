@@ -84,7 +84,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink().id(d => d.code))
-                .force('charge', d3.forceManyBody().strength(-50))
+                .force('charge', d3.forceManyBody().strength(-70))
                 .force('center', d3.forceCenter(width / 2, height / 2));
         
         const link = svg.append('g')
@@ -97,7 +97,7 @@
                 .attr('stroke', d => occurrencesToRgb(d));
 
         const getNodeRadius = emoji => {
-            //TODO
+            //TOD
             return 8;
         };
     
