@@ -1,8 +1,9 @@
 (() => {
 
-    $.post( 'http://localhost:8080/api/graph/1600', res => {
+    $.post( 'http://tinyicon.co/vis/graph/1600', res => {
         
         const graph = JSON.parse(res);
+	test = graph;
 
         // Unit scale for edges
         const occurrencesToUnit = d3.scaleLog()

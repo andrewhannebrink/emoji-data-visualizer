@@ -13,7 +13,7 @@
     "start": "node server/index.js",
     "parse": "node utilities/emoji-data-parser/emoji-data-parser.js && cp utilities/emoji-data-parser/emoji-data.json app/emoji-data.json",
     "scrape": "node utilities/twitter-scraper/scraper.js",
-    "mongo": "sudo mongod --dbpath=/data",
+    "mongo": "sudo mongod --dbpath=/data --smallfiles",
     "dbshell": "sudo /./usr/local/Cellar/mongodb/3.2.10/bin/mongo"
   },
   "author": "",

@@ -164,7 +164,6 @@ MongoClient.connect(mongoUrl, (err, db) => {
                             }
                         });
             }
-        
             stream.on('tweet', function (tweet) {
                 const emojis = getEmojis(tweet.text);
                 updateMongo(emojis, nodesCollection, linksCollection);
