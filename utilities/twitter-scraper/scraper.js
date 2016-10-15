@@ -126,6 +126,21 @@ const updateLinkOccurrences = (assocs, linksCollection) => {
 // Takes an array of emoji codes and updates mongo for each appearance
 const updateEmojiAppearances = (emojis, assocs, nodesCollection) => {
     // TODO
+    for (let i = 0; i < assocs.length; i += 1) {
+        const newAppearances = emojis.map(emoji => emoji === assocs[i] ? 1 : 0)
+                .reduce((a, b) => a + b);
+
+        nodesCollection.update(
+                {code: assocs[i]},
+                {$inc: {appearances: newAppearances}},
+                {w: 1},
+                (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+    }
+
 };
 
 // Updates mongo 

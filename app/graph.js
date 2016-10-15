@@ -1,16 +1,22 @@
 (() => {
 
-    $.post( 'http://tinyicon.co/vis/graph/1600', res => {
+    $.post( 'http://localhost:8080/vis/graph/1600', res => {
         
         const graph = JSON.parse(res);
-	test = graph;
+        test = graph;
 
         // Unit scale for edges
         const occurrencesToUnit = d3.scaleLog()
-                .base(100000000)
                 .domain([
                         d3.min(graph.links, d => d.occurrences), 
                         d3.max(graph.links, d => d.occurrences)])
+                .range([0, 1]);
+                
+        // Unit scale for nodes (emojis) 
+        const appearancesToUnit = d3.scaleSqrt()
+                .domain([
+                        d3.min(graph.nodes, d => d.appearances), 
+                        d3.max(graph.nodes, d => d.appearances)])
                 .range([0, 1]);
 
         // Opacity scale for edges
@@ -93,8 +99,9 @@
                 .attr('stroke', d => occurrencesToRgb(d));
 
         const getNodeRadius = emoji => {
-            //TOD
-            return 8;
+            console.log(emoji.appearances);
+            const r  = (appearancesToUnit(parseInt(emoji.appearances))) * 32 + 4;
+            return r;
         };
     
         const node = svg.append('g')
