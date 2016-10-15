@@ -2,6 +2,7 @@
             assert = require('assert');
 
     module.exports.initiateApi = (app, pub, mongoUrl) => {
+        console.log('Initializing visualization api ... ');
         app.post('/vis/graph/:links', (req, res) => {
             MongoClient.connect(mongoUrl, (err, db) => {
                 if (err) {
