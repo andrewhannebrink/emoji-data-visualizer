@@ -4,8 +4,8 @@
     module.exports.initiateApi = (app, pub, mongoUrl) => {
         //CORS middleware
         const allowCrossDomain = (req, res, next) => {
-            res.header('Access-Control-Allow-Origin', 'http://www.tinyicon.co');
-            //res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+            //res.header('Access-Control-Allow-Origin', 'http://www.tinyicon.co');
+            res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
             res.header('Access-Control-Allow-Headers', 'Content-Type');
             next();
@@ -46,12 +46,6 @@
                                                 graph.links.push(link);
                                             } else {
                                                 // Send the completed graph object in json format
-                                                /*graph.links = graph.links.sort((a, b) => {
-                                                    return a.occurrences > b.occurrences;
-                                                }); 
-                                                graph.links = graph.links.slice(
-                                                        graph.links.length - max, 
-                                                        graph.links.length);*/
                                                 graph.links = graph.links.reverse();
                                                 res.send(JSON.stringify(graph));
                                             }   
