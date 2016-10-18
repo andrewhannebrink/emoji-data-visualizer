@@ -1,9 +1,8 @@
 (() => {
 
-    $.post( 'http://localhost:8080/vis/graph/1600', res => {
+    $.post( 'http://tinyicon.co/vis/graph/1600', res => {
         
         const graph = JSON.parse(res);
-        test = graph;
 
         // Unit scale for edges
         const occurrencesToUnit = d3.scaleLog()
@@ -99,7 +98,6 @@
                 .attr('stroke', d => occurrencesToRgb(d));
 
         const getNodeRadius = emoji => {
-            console.log(emoji.appearances);
             const r  = (appearancesToUnit(parseInt(emoji.appearances))) * 32 + 4;
             return r;
         };

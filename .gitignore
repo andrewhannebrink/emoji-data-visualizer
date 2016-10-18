@@ -1,3 +1,4 @@
 node_modules
+npm-debug.log
 app/bower_components
 utilities/twitter-scraper/config1.js

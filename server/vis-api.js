@@ -2,6 +2,16 @@
             assert = require('assert');
 
     module.exports.initiateApi = (app, pub, mongoUrl) => {
+        //CORS middleware
+        const allowCrossDomain = (req, res, next) => {
+            res.header('Access-Control-Allow-Origin', 'http://www.tinyicon.co');
+            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+            res.header('Access-Control-Allow-Headers', 'Content-Type');
+            next();
+        };
+
+        app.use(allowCrossDomain);
+
         console.log('Initializing visualization api ... ');
         app.post('/vis/graph/:links', (req, res) => {
             MongoClient.connect(mongoUrl, (err, db) => {
