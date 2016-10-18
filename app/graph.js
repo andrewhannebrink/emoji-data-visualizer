@@ -1,6 +1,6 @@
 (() => {
 
-    $.post( 'http://localhost:8080/vis/graph/1600', res => {
+    $.post( 'http://tinyicon.co/vis/graph/900', res => {
         
         const graph = JSON.parse(res);
 

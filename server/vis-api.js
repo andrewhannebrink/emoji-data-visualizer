@@ -5,7 +5,7 @@
         //CORS middleware
         const allowCrossDomain = (req, res, next) => {
             res.header('Access-Control-Allow-Origin', 'http://www.tinyicon.co');
-            res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+            //res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
             res.header('Access-Control-Allow-Headers', 'Content-Type');
             next();
@@ -28,7 +28,11 @@
                 db.collection('nodes', (err, nodesCollection) => {
                     db.collection('links', (err, linksCollection) => {
                         nodesCollection.find({}, (err, nodesCursor) => {
-                            linksCollection.find({}, (err, linksCursor) => {
+                           const options = {
+                               'limit': max,
+                               'sort': {'occurrences': -1}
+                           }
+                            linksCollection.find({}, options, (err, linksCursor) => {
                                 assert.equal(err, null);
                                 nodesCursor.each((err, node) => {
                                     assert.equal(err, null);
@@ -42,12 +46,13 @@
                                                 graph.links.push(link);
                                             } else {
                                                 // Send the completed graph object in json format
-                                                graph.links = graph.links.sort((a, b) => {
+                                                /*graph.links = graph.links.sort((a, b) => {
                                                     return a.occurrences > b.occurrences;
                                                 }); 
                                                 graph.links = graph.links.slice(
                                                         graph.links.length - max, 
-                                                        graph.links.length);
+                                                        graph.links.length);*/
+                                                graph.links = graph.links.reverse();
                                                 res.send(JSON.stringify(graph));
                                             }   
                                         }); 
