@@ -9,6 +9,7 @@
     const pub = path.join(__dirname, '../app'),
             mongoUrl = 'mongodb://localhost:27017/emojis';
 
+
     visApi.initiateApi(app, pub, mongoUrl);
     
     app.use('/m/info', express.static(pub));
