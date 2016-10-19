@@ -1,6 +1,6 @@
 (() => {
 
-    $.post( 'http://localhost:8080/vis/graph/3000/8', res => {
+    $.post( 'http://localhost:8080/vis/graph/2500/6', res => {
         
         const graph = JSON.parse(res);
         test = graph;
@@ -53,7 +53,6 @@
                 g -= (totalRgbSteps % 256);
                 b = 0;
             }
-
             return d3.rgb(r, g, b);
         };
 
@@ -86,7 +85,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink().id(d => d.code))
-                .force('charge', d3.forceManyBody().strength(-30))
+                .force('charge', d3.forceManyBody().strength(-20))
                 .force('center', d3.forceCenter(width / 2 - 350, height / 2));
         
         const link = svg.append('g')
@@ -99,7 +98,7 @@
                 .attr('stroke', d => occurrencesToRgb(d));
 
         const getNodeRadius = emoji => {
-            const r  = (appearancesToUnit(parseInt(emoji.appearances))) * 32 + 4;
+            const r  = (appearancesToUnit(parseInt(emoji.appearances))) * 42 + 6;
             return r;
         };
     
