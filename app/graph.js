@@ -1,6 +1,6 @@
 (() => {
 
-    $.post( 'http://localhost:8080/vis/graph/2000/4', res => {
+    $.post( 'http://localhost:8080/vis/graph/3000/8', res => {
         
         const graph = JSON.parse(res);
         test = graph;
