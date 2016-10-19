@@ -1,8 +1,9 @@
 (() => {
 
-    $.post( 'http://localhost:8080/vis/graph/900', res => {
+    $.post( 'http://localhost:8080/vis/graph/2000/4', res => {
         
         const graph = JSON.parse(res);
+        test = graph;
 
         // Unit scale for edges
         const occurrencesToUnit = d3.scaleLog()
@@ -85,7 +86,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink().id(d => d.code))
-                .force('charge', d3.forceManyBody().strength(-60))
+                .force('charge', d3.forceManyBody().strength(-30))
                 .force('center', d3.forceCenter(width / 2 - 350, height / 2));
         
         const link = svg.append('g')
