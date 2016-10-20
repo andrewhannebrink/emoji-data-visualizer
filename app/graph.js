@@ -1,6 +1,7 @@
 (() => {
 
-    $.post( 'http://localhost:8080/vis/graph/2500/6', res => {
+    $.post( 'http://tinyicon.co/vis/graph/1200/8', res => {
+    //$.post( 'http://localhost:8080/vis/graph/2500/10', res => {
         
         const graph = JSON.parse(res);
         test = graph;
@@ -85,7 +86,7 @@
     
         const simulation = d3.forceSimulation()
                 .force('link', d3.forceLink().id(d => d.code))
-                .force('charge', d3.forceManyBody().strength(-20))
+                .force('charge', d3.forceManyBody().strength(-30))
                 .force('center', d3.forceCenter(width / 2 - 350, height / 2));
         
         const link = svg.append('g')
